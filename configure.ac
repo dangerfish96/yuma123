@@ -98,6 +98,7 @@ AC_CONFIG_FILES([
         netconf/src/subsys/Makefile
         libtoaster/src/Makefile
         example-modules/helloworld/Makefile
+        example-modules/i2rs/Makefile
         example-modules/ietf-interfaces/Makefile
         example-modules/ietf-system/Makefile
         example-modules/ietf-network-bridge/Makefile

@@ -8,6 +8,7 @@ netconf/src/yangcli \
 libtoaster/src \
 netconf/modules \
 example-modules/helloworld \
+example-modules/i2rs \
 example-modules/ietf-interfaces \
 example-modules/ietf-system \
 example-modules/ietf-network-bridge \
@@ -155,4 +156,5 @@ EXTRA_DIST= \
 netconf/src/yangdiff \
 example-modules/ietf-interfaces \
 example-modules/ietf-system \
+example-modules/i2rs \
 rpm

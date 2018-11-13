@@ -1,0 +1,41 @@
+module i2rs {
+
+  namespace "http://yuma123.org/ns/i2rs";
+
+  prefix "i2rs";
+
+  organization  "yuma123.org";
+
+  description 
+    "i2rs module";
+
+  revision 2016-10-17 {
+      description
+          "Initial revision";
+  }
+
+  rpc add-route {
+    description
+      "Adds a route.";
+    input {
+      leaf text {
+        type string;
+        mandatory true;
+        description
+          "Text of the message.";
+      }
+    }
+  }
+
+  notification message {
+    description
+      "This notification is used to report a message.";
+
+    leaf text {
+      type string;
+      mandatory true;
+      description
+        "Text of the message.";
+    }
+  }
+}
