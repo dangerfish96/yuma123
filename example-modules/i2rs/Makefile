@@ -16,6 +16,7 @@
 
 
 
+
 am__is_gnu_make = { \
   if test -z '$(MAKELEVEL)'; then \
     false; \
@@ -92,10 +93,14 @@ host_triplet = x86_64-pc-linux-gnu
 target_triplet = x86_64-pc-linux-gnu
 subdir = example-modules/i2rs
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/configure.ac
+am__aclocal_m4_deps = $(top_srcdir)/m4/libtool.m4 \
+	$(top_srcdir)/m4/ltoptions.m4 $(top_srcdir)/m4/ltsugar.m4 \
+	$(top_srcdir)/m4/ltversion.m4 $(top_srcdir)/m4/lt~obsolete.m4 \
+	$(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
-DIST_COMMON = $(srcdir)/Makefile.am $(am__DIST_COMMON)
+DIST_COMMON = $(srcdir)/Makefile.am $(noinst_HEADERS) \
+	$(am__DIST_COMMON)
 mkinstalldirs = $(install_sh) -d
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
@@ -130,7 +135,8 @@ am__installdirs = "$(DESTDIR)$(netconfmoduledir)" \
 	"$(DESTDIR)$(examples_yangdir)"
 LTLIBRARIES = $(netconfmodule_LTLIBRARIES)
 libi2rs_la_LIBADD =
-am_libi2rs_la_OBJECTS = libi2rs_la-i2rs.lo
+am_libi2rs_la_OBJECTS = libi2rs_la-ietf-i2rs-rib.lo \
+	libi2rs_la-Socket.lo
 libi2rs_la_OBJECTS = $(am_libi2rs_la_OBJECTS)
 AM_V_lt = $(am__v_lt_$(V))
 am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
@@ -181,6 +187,7 @@ am__can_run_installinfo = \
     *) (install-info --version) >/dev/null 2>&1;; \
   esac
 DATA = $(examples_yang_DATA)
+HEADERS = $(noinst_HEADERS)
 am__tagged_files = $(HEADERS) $(SOURCES) $(TAGS_FILES) $(LISP)
 # Read a list of newline-separated strings from the standard input,
 # and print each of them once, without duplicates.  Input order is
@@ -301,7 +308,7 @@ datadir = ${datarootdir}
 datarootdir = ${prefix}/share
 docdir = ${datarootdir}/doc/${PACKAGE_TARNAME}
 dvidir = ${docdir}
-examples_yangdir = NONE/share/yuma/modules/examples
+examples_yangdir = /usr/share/yuma/modules/examples
 exec_prefix = ${prefix}
 host = x86_64-pc-linux-gnu
 host_alias = 
@@ -331,7 +338,7 @@ nmda_modules_ietf_yangdir = ${prefix}/share/yuma/nmda-modules/ietf
 oldincludedir = /usr/include
 pdfdir = ${docdir}
 platform_netconf_includedir = ${prefix}/include/yuma/platform
-prefix = /usr/local
+prefix = /usr
 program_transform_name = s,x,x,
 psdir = ${docdir}
 runstatedir = ${localstatedir}/run
@@ -352,12 +359,13 @@ yangrpc_netconf_includedir = ${prefix}/include/yuma/yangrpc
 yuma123_yangdir = ${prefix}/share/yuma/modules/yuma123
 yuma_datarootdir = ${prefix}/share/yuma
 netconfmodule_LTLIBRARIES = libi2rs.la
+noinst_HEADERS = ietf-i2rs-rib.h com.h
 libi2rs_la_SOURCES = \
-$(top_srcdir)/example-modules/i2rs/i2rs.c
+$(top_srcdir)/example-modules/i2rs/ietf-i2rs-rib.c $(top_srcdir)/example-modules/i2rs/Socket.c
 
 libi2rs_la_CPPFLAGS = -I $(top_srcdir)/netconf/src/ -I$(top_srcdir)/netconf/src/agt -I$(top_srcdir)/netconf/src/mgr -I$(top_srcdir)/netconf/src/ncx -I$(top_srcdir)/netconf/src/platform -I$(top_srcdir)/netconf/src/ydump $(XML_CPPFLAGS)
-libi2rs_la_LDFLAGS = -module $(top_builddir)/netconf/src/agt/libyumaagt.la $(top_builddir)/netconf/src/ncx/libyumancx.la 
-examples_yang_DATA = $(top_srcdir)/example-modules/i2rs/i2rs.yang
+libi2rs_la_LDFLAGS = -module $(top_builddir)/netconf/src/agt/libyumaagt.la $(top_builddir)/netconf/src/ncx/libyumancx.la
+examples_yang_DATA = $(top_srcdir)/example-modules/i2rs/ietf-i2rs-rib.yang
 all: all-am
 
 .SUFFIXES:
@@ -436,7 +444,8 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-include ./$(DEPDIR)/libi2rs_la-i2rs.Plo
+include ./$(DEPDIR)/libi2rs_la-Socket.Plo
+include ./$(DEPDIR)/libi2rs_la-ietf-i2rs-rib.Plo
 
 .c.o:
 	$(AM_V_CC)$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -459,12 +468,19 @@ include ./$(DEPDIR)/libi2rs_la-i2rs.Plo
 #	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
 #	$(AM_V_CC_no)$(LTCOMPILE) -c -o $@ $<
 
-libi2rs_la-i2rs.lo: $(top_srcdir)/example-modules/i2rs/i2rs.c
-	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libi2rs_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libi2rs_la-i2rs.lo -MD -MP -MF $(DEPDIR)/libi2rs_la-i2rs.Tpo -c -o libi2rs_la-i2rs.lo `test -f '$(top_srcdir)/example-modules/i2rs/i2rs.c' || echo '$(srcdir)/'`$(top_srcdir)/example-modules/i2rs/i2rs.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/libi2rs_la-i2rs.Tpo $(DEPDIR)/libi2rs_la-i2rs.Plo
-#	$(AM_V_CC)source='$(top_srcdir)/example-modules/i2rs/i2rs.c' object='libi2rs_la-i2rs.lo' libtool=yes \
+libi2rs_la-ietf-i2rs-rib.lo: $(top_srcdir)/example-modules/i2rs/ietf-i2rs-rib.c
+	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libi2rs_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libi2rs_la-ietf-i2rs-rib.lo -MD -MP -MF $(DEPDIR)/libi2rs_la-ietf-i2rs-rib.Tpo -c -o libi2rs_la-ietf-i2rs-rib.lo `test -f '$(top_srcdir)/example-modules/i2rs/ietf-i2rs-rib.c' || echo '$(srcdir)/'`$(top_srcdir)/example-modules/i2rs/ietf-i2rs-rib.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/libi2rs_la-ietf-i2rs-rib.Tpo $(DEPDIR)/libi2rs_la-ietf-i2rs-rib.Plo
+#	$(AM_V_CC)source='$(top_srcdir)/example-modules/i2rs/ietf-i2rs-rib.c' object='libi2rs_la-ietf-i2rs-rib.lo' libtool=yes \
 #	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libi2rs_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libi2rs_la-i2rs.lo `test -f '$(top_srcdir)/example-modules/i2rs/i2rs.c' || echo '$(srcdir)/'`$(top_srcdir)/example-modules/i2rs/i2rs.c
+#	$(AM_V_CC_no)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libi2rs_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libi2rs_la-ietf-i2rs-rib.lo `test -f '$(top_srcdir)/example-modules/i2rs/ietf-i2rs-rib.c' || echo '$(srcdir)/'`$(top_srcdir)/example-modules/i2rs/ietf-i2rs-rib.c
+
+libi2rs_la-Socket.lo: $(top_srcdir)/example-modules/i2rs/Socket.c
+	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libi2rs_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libi2rs_la-Socket.lo -MD -MP -MF $(DEPDIR)/libi2rs_la-Socket.Tpo -c -o libi2rs_la-Socket.lo `test -f '$(top_srcdir)/example-modules/i2rs/Socket.c' || echo '$(srcdir)/'`$(top_srcdir)/example-modules/i2rs/Socket.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/libi2rs_la-Socket.Tpo $(DEPDIR)/libi2rs_la-Socket.Plo
+#	$(AM_V_CC)source='$(top_srcdir)/example-modules/i2rs/Socket.c' object='libi2rs_la-Socket.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libi2rs_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libi2rs_la-Socket.lo `test -f '$(top_srcdir)/example-modules/i2rs/Socket.c' || echo '$(srcdir)/'`$(top_srcdir)/example-modules/i2rs/Socket.c
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -577,7 +593,7 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-am
-all-am: Makefile $(LTLIBRARIES) $(DATA)
+all-am: Makefile $(LTLIBRARIES) $(DATA) $(HEADERS)
 installdirs:
 	for dir in "$(DESTDIR)$(netconfmoduledir)" "$(DESTDIR)$(examples_yangdir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
