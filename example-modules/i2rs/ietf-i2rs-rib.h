@@ -44,6 +44,7 @@ extern "C" {
 #define y_ietf_i2rs_rib_N_prefix (const xmlChar *)"prefix"
 #define y_ietf_i2rs_rib_N_return_failure_detail (const xmlChar *)"return-failure-detail"
 #define y_ietf_i2rs_rib_N_route_add (const xmlChar *)"route-add"
+#define y_ietf_i2rs_rib_N_route_delete (const xmlChar *)"route-delete"
 #define y_ietf_i2rs_rib_N_route_index (const xmlChar *)"route-index"
 #define y_ietf_i2rs_rib_N_route_preference (const xmlChar *)"route-preference"
 #define y_ietf_i2rs_rib_N_success_count (const xmlChar *)"success-count"
@@ -80,6 +81,39 @@ typedef struct y_ietf_i2rs_rib_T_route_add_ {
   y_ietf_i2rs_rib_T_route_add_input input;
   y_ietf_i2rs_rib_T_route_add_output output;
 } y_ietf_i2rs_rib_T_route_add;
+
+/* container /route-delete/input */
+typedef struct y_ietf_i2rs_rib_T_route_delete_input_ {
+  boolean return_failure_detail;
+  xmlChar *prefix;
+  xmlChar *nexthop;
+  uint32 route_preference;
+} y_ietf_i2rs_rib_T_route_delete_input;
+
+/* list /route-delete/output/failure-detail/failed-routes */
+typedef struct y_ietf_i2rs_rib_T_route_delete_output_failure_detail_failed_routes_ {
+  dlq_hdr_t qhdr;
+  uint32 route_index;
+  uint32 error_code;
+} y_ietf_i2rs_rib_T_route_delete_output_failure_detail_failed_routes;
+
+/* container /route-delete/output/failure-detail */
+typedef struct y_ietf_i2rs_rib_T_route_delete_output_failure_detail_ {
+  dlq_hdr_t failed_routes;
+} y_ietf_i2rs_rib_T_route_delete_output_failure_detail;
+
+/* container /route-delete/output */
+typedef struct y_ietf_i2rs_rib_T_route_delete_output_ {
+  uint32 success_count;
+  uint32 failed_count;
+  y_ietf_i2rs_rib_T_route_delete_output_failure_detail failure_detail;
+} y_ietf_i2rs_rib_T_route_delete_output;
+
+/* rpc /route-delete */
+typedef struct y_ietf_i2rs_rib_T_route_delete_ {
+  y_ietf_i2rs_rib_T_route_delete_input input;
+  y_ietf_i2rs_rib_T_route_delete_output output;
+} y_ietf_i2rs_rib_T_route_delete;
 /********************************************************************
 * FUNCTION y_ietf_i2rs_rib_init
 * 

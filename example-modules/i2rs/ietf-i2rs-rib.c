@@ -40,15 +40,13 @@
 #include "xml_util.h"
 #include "ietf-i2rs-rib.h"
 
-#define __STDC_WANT_LIB_EXT1__ 1
-#include <string.h>
-#include <stdio.h>
-
 #include "com.h"
+#include "string.h"
 
 /* module static variables */
 static ncx_module_t *ietf_i2rs_rib_mod;
 static obj_template_t *route_add_obj;
+static obj_template_t *route_delete_obj;
 
 /* put your static variables here */
 
@@ -62,6 +60,7 @@ static void y_ietf_i2rs_rib_init_static_vars (void)
 {
   ietf_i2rs_rib_mod = NULL;
   route_add_obj = NULL;
+  route_delete_obj = NULL;
 
   /* init your static variables here */
 
@@ -171,12 +170,12 @@ static status_t y_ietf_i2rs_rib_route_add_invoke (
   boolean return_failure_detail;
   val_value_t *prefix_val;
   xmlChar *prefix;
-  const xmlChar *address;
-  const xmlChar *prefixlen;
+  xmlChar *address;
+  xmlChar *prefixlen;
   val_value_t *nexthop_val;
-  const xmlChar *nexthop;
+  xmlChar *nexthop;
   val_value_t *route_preference_val;
-  uint32 route_preference;
+  uint32 route_preference = 0;
 
   return_failure_detail_val = val_find_child(
     msg->rpc_input,
@@ -192,8 +191,8 @@ static status_t y_ietf_i2rs_rib_route_add_invoke (
     y_ietf_i2rs_rib_N_prefix);
   if (prefix_val != NULL && prefix_val->res == NO_ERR) {
     prefix = VAL_STRING(prefix_val);
-    address = strtok(prefix, "/");
-    prefixlen = strtok(NULL, "/"); 
+    address = strsep(&prefix, "/");
+    prefixlen = strsep(&prefix, "/");
   }
 
   nexthop_val = val_find_child(
@@ -219,11 +218,174 @@ static status_t y_ietf_i2rs_rib_route_add_invoke (
   (void)methnode;
 
   /* invoke your device instrumentation code here */
-  makeCommand(ZEBRA_IPV4_ROUTE_ADD, address, strtol(prefixlen,(char **)NULL,10), nexthop, route_preference);
+  if (address != NULL && prefixlen != NULL && nexthop != NULL && route_preference != 0){
+            makeCommand(ZEBRA_IPV4_ROUTE_ADD, address, strtol(prefixlen,(char **)NULL,10), nexthop, route_preference);
+    }
+
   
   return res;
 
 } /* y_ietf_i2rs_rib_route_add_invoke */
+
+
+/********************************************************************
+* FUNCTION y_ietf_i2rs_rib_route_delete_validate
+* 
+* RPC validation phase
+* All YANG constraints have passed at this point.
+* Add description-stmt checks in this function.
+* 
+* INPUTS:
+*     see agt/agt_rpc.h for details
+* 
+* RETURNS:
+*     error status
+********************************************************************/
+static status_t y_ietf_i2rs_rib_route_delete_validate (
+  ses_cb_t *scb,
+  rpc_msg_t *msg,
+  xml_node_t *methnode)
+{
+  status_t res = NO_ERR;
+  val_value_t *errorval = NULL;
+
+  val_value_t *return_failure_detail_val;
+  boolean return_failure_detail;
+  val_value_t *prefix_val;
+  const xmlChar *prefix;
+  val_value_t *nexthop_val;
+  const xmlChar *nexthop;
+  val_value_t *route_preference_val;
+  uint32 route_preference;
+
+  return_failure_detail_val = val_find_child(
+    msg->rpc_input,
+    y_ietf_i2rs_rib_M_ietf_i2rs_rib,
+    y_ietf_i2rs_rib_N_return_failure_detail);
+  if (return_failure_detail_val != NULL && return_failure_detail_val->res == NO_ERR) {
+    return_failure_detail = VAL_BOOL(return_failure_detail_val);
+  }
+
+  prefix_val = val_find_child(
+    msg->rpc_input,
+    y_ietf_i2rs_rib_M_ietf_i2rs_rib,
+    y_ietf_i2rs_rib_N_prefix);
+  if (prefix_val != NULL && prefix_val->res == NO_ERR) {
+    prefix = VAL_STRING(prefix_val);
+  }
+
+  nexthop_val = val_find_child(
+    msg->rpc_input,
+    y_ietf_i2rs_rib_M_ietf_i2rs_rib,
+    y_ietf_i2rs_rib_N_nexthop);
+  if (nexthop_val != NULL && nexthop_val->res == NO_ERR) {
+    nexthop = VAL_STRING(nexthop_val);
+  }
+
+  route_preference_val = val_find_child(
+    msg->rpc_input,
+    y_ietf_i2rs_rib_M_ietf_i2rs_rib,
+    y_ietf_i2rs_rib_N_route_preference);
+  if (route_preference_val != NULL && route_preference_val->res == NO_ERR) {
+    route_preference = VAL_UINT(route_preference_val);
+  }
+
+  if (res != NO_ERR) {
+    agt_record_error(
+      scb,
+      &msg->mhdr,
+      NCX_LAYER_OPERATION,
+      res,
+      methnode,
+      (errorval) ? NCX_NT_VAL : NCX_NT_NONE,
+      errorval,
+      (errorval) ? NCX_NT_VAL : NCX_NT_NONE,
+      errorval);
+  }
+  return res;
+
+} /* y_ietf_i2rs_rib_route_delete_validate */
+
+
+/********************************************************************
+* FUNCTION y_ietf_i2rs_rib_route_delete_invoke
+* 
+* RPC invocation phase
+* All constraints have passed at this point.
+* Call device instrumentation code in this function.
+* 
+* INPUTS:
+*     see agt/agt_rpc.h for details
+* 
+* RETURNS:
+*     error status
+********************************************************************/
+static status_t y_ietf_i2rs_rib_route_delete_invoke (
+  ses_cb_t *scb,
+  rpc_msg_t *msg,
+  xml_node_t *methnode)
+{
+  status_t res = NO_ERR;
+
+  val_value_t *return_failure_detail_val;
+  boolean return_failure_detail;
+  val_value_t *prefix_val;
+  xmlChar *address;
+  xmlChar *prefixlen;
+  xmlChar *prefix;
+  val_value_t *nexthop_val;
+  xmlChar *nexthop;
+  val_value_t *route_preference_val;
+  uint32 route_preference = 0;
+
+  return_failure_detail_val = val_find_child(
+    msg->rpc_input,
+    y_ietf_i2rs_rib_M_ietf_i2rs_rib,
+    y_ietf_i2rs_rib_N_return_failure_detail);
+  if (return_failure_detail_val != NULL && return_failure_detail_val->res == NO_ERR) {
+    return_failure_detail = VAL_BOOL(return_failure_detail_val);
+  }
+
+  prefix_val = val_find_child(
+    msg->rpc_input,
+    y_ietf_i2rs_rib_M_ietf_i2rs_rib,
+    y_ietf_i2rs_rib_N_prefix);
+  if (prefix_val != NULL && prefix_val->res == NO_ERR) {
+    prefix = VAL_STRING(prefix_val);
+    address = strsep(&prefix, "/");
+    prefixlen = strsep(&prefix, "/");
+  }
+
+  nexthop_val = val_find_child(
+    msg->rpc_input,
+    y_ietf_i2rs_rib_M_ietf_i2rs_rib,
+    y_ietf_i2rs_rib_N_nexthop);
+  if (nexthop_val != NULL && nexthop_val->res == NO_ERR) {
+    nexthop = VAL_STRING(nexthop_val);
+  }
+
+  route_preference_val = val_find_child(
+    msg->rpc_input,
+    y_ietf_i2rs_rib_M_ietf_i2rs_rib,
+    y_ietf_i2rs_rib_N_route_preference);
+  if (route_preference_val != NULL && route_preference_val->res == NO_ERR) {
+    route_preference = VAL_UINT(route_preference_val);
+  }
+
+  /* remove the next line if scb is used */
+  (void)scb;
+
+  /* remove the next line if methnode is used */
+  (void)methnode;
+
+  /* invoke your device instrumentation code here */
+ //if (address != NULL && prefixlen != NULL && nexthop != NULL && route_preference != 0){
+              makeCommand(ZEBRA_IPV4_ROUTE_DELETE, address, strtol(prefixlen,(char **)NULL,10), nexthop, route_preference);
+//}
+  
+  return res;
+
+} /* y_ietf_i2rs_rib_route_delete_invoke */
 
 /********************************************************************
 * FUNCTION y_ietf_i2rs_rib_init
@@ -269,6 +431,12 @@ status_t y_ietf_i2rs_rib_init (
   if (ietf_i2rs_rib_mod == NULL) {
     return SET_ERROR(ERR_NCX_DEF_NOT_FOUND);
   }
+  route_delete_obj = ncx_find_object(
+    ietf_i2rs_rib_mod,
+    y_ietf_i2rs_rib_N_route_delete);
+  if (ietf_i2rs_rib_mod == NULL) {
+    return SET_ERROR(ERR_NCX_DEF_NOT_FOUND);
+  }
   res = agt_rpc_register_method(
     y_ietf_i2rs_rib_M_ietf_i2rs_rib,
     y_ietf_i2rs_rib_N_route_add,
@@ -283,6 +451,24 @@ status_t y_ietf_i2rs_rib_init (
     y_ietf_i2rs_rib_N_route_add,
     AGT_RPC_PH_INVOKE,
     y_ietf_i2rs_rib_route_add_invoke);
+  if (res != NO_ERR) {
+    return res;
+  }
+
+  res = agt_rpc_register_method(
+    y_ietf_i2rs_rib_M_ietf_i2rs_rib,
+    y_ietf_i2rs_rib_N_route_delete,
+    AGT_RPC_PH_VALIDATE,
+    y_ietf_i2rs_rib_route_delete_validate);
+  if (res != NO_ERR) {
+    return res;
+  }
+
+  res = agt_rpc_register_method(
+    y_ietf_i2rs_rib_M_ietf_i2rs_rib,
+    y_ietf_i2rs_rib_N_route_delete,
+    AGT_RPC_PH_INVOKE,
+    y_ietf_i2rs_rib_route_delete_invoke);
   if (res != NO_ERR) {
     return res;
   }
@@ -321,6 +507,10 @@ void y_ietf_i2rs_rib_cleanup (void)
   agt_rpc_unregister_method(
     y_ietf_i2rs_rib_M_ietf_i2rs_rib,
     y_ietf_i2rs_rib_N_route_add);
+  
+  agt_rpc_unregister_method(
+    y_ietf_i2rs_rib_M_ietf_i2rs_rib,
+    y_ietf_i2rs_rib_N_route_delete);
   /* put your cleanup code here */
   
 } /* y_ietf_i2rs_rib_cleanup */

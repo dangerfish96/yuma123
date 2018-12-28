@@ -104,4 +104,45 @@ module ietf-i2rs-rib {
       uses route-operation-state;
     }
   }
+  rpc route-delete {
+    description
+      "To delete a route";
+    input {
+      leaf return-failure-detail {
+        type boolean;
+        default false;
+        description
+          "Whether return the failure detail.
+           true  - return the failure detail;
+           false - do not return the failure detail;
+           the default is false.";
+      }
+
+	 leaf prefix {
+			  type inet:ipv4-prefix;
+			  mandatory true;
+			  description
+			    "An IPv4 destination address as the match.";
+			}
+	leaf nexthop {
+		  type inet:ipv4-address;
+		  mandatory true;
+		  description
+		    "The nexthop is an IPv4 address.";
+		}
+	leaf route-preference {
+	      type uint32;
+	      mandatory true;
+	      description
+		"The preference of the route";
+	}
+
+
+
+
+    }
+    output {
+      uses route-operation-state;
+    }
+  }
 }
