@@ -134,17 +134,18 @@ am__uninstall_files_from_dir = { \
 am__installdirs = "$(DESTDIR)$(netconfmoduledir)" \
 	"$(DESTDIR)$(examples_yangdir)"
 LTLIBRARIES = $(netconfmodule_LTLIBRARIES)
-libi2rs_la_LIBADD =
-am_libi2rs_la_OBJECTS = libi2rs_la-ietf-i2rs-rib.lo \
-	libi2rs_la-Socket.lo
-libi2rs_la_OBJECTS = $(am_libi2rs_la_OBJECTS)
+libietf_i2rs_rib_la_LIBADD =
+am_libietf_i2rs_rib_la_OBJECTS = libietf_i2rs_rib_la-ietf-i2rs-rib.lo \
+	libietf_i2rs_rib_la-Socket.lo libietf_i2rs_rib_la-com.lo
+libietf_i2rs_rib_la_OBJECTS = $(am_libietf_i2rs_rib_la_OBJECTS)
 AM_V_lt = $(am__v_lt_$(V))
 am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
 am__v_lt_0 = --silent
 am__v_lt_1 = 
-libi2rs_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-	$(libi2rs_la_LDFLAGS) $(LDFLAGS) -o $@
+libietf_i2rs_rib_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC \
+	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CCLD) \
+	$(AM_CFLAGS) $(CFLAGS) $(libietf_i2rs_rib_la_LDFLAGS) \
+	$(LDFLAGS) -o $@
 AM_V_P = $(am__v_P_$(V))
 am__v_P_ = $(am__v_P_$(AM_DEFAULT_VERBOSITY))
 am__v_P_0 = false
@@ -179,8 +180,8 @@ AM_V_CCLD = $(am__v_CCLD_$(V))
 am__v_CCLD_ = $(am__v_CCLD_$(AM_DEFAULT_VERBOSITY))
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
-SOURCES = $(libi2rs_la_SOURCES)
-DIST_SOURCES = $(libi2rs_la_SOURCES)
+SOURCES = $(libietf_i2rs_rib_la_SOURCES)
+DIST_SOURCES = $(libietf_i2rs_rib_la_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -358,13 +359,13 @@ yangdir = ${prefix}/share/yuma/modules
 yangrpc_netconf_includedir = ${prefix}/include/yuma/yangrpc
 yuma123_yangdir = ${prefix}/share/yuma/modules/yuma123
 yuma_datarootdir = ${prefix}/share/yuma
-netconfmodule_LTLIBRARIES = libi2rs.la
-noinst_HEADERS = ietf-i2rs-rib.h com.h
-libi2rs_la_SOURCES = \
-$(top_srcdir)/example-modules/i2rs/ietf-i2rs-rib.c $(top_srcdir)/example-modules/i2rs/Socket.c
+netconfmodule_LTLIBRARIES = libietf-i2rs-rib.la
+noinst_HEADERS = ietf-i2rs-rib.h com.h Socket.h
+libietf_i2rs_rib_la_SOURCES = \
+$(top_srcdir)/example-modules/i2rs/ietf-i2rs-rib.c $(top_srcdir)/example-modules/i2rs/Socket.c $(top_srcdir)/example-modules/i2rs/com.c
 
-libi2rs_la_CPPFLAGS = -I $(top_srcdir)/netconf/src/ -I$(top_srcdir)/netconf/src/agt -I$(top_srcdir)/netconf/src/mgr -I$(top_srcdir)/netconf/src/ncx -I$(top_srcdir)/netconf/src/platform -I$(top_srcdir)/netconf/src/ydump $(XML_CPPFLAGS)
-libi2rs_la_LDFLAGS = -module $(top_builddir)/netconf/src/agt/libyumaagt.la $(top_builddir)/netconf/src/ncx/libyumancx.la
+libietf_i2rs_rib_la_CPPFLAGS = -I $(top_srcdir)/netconf/src/ -I$(top_srcdir)/netconf/src/agt -I$(top_srcdir)/netconf/src/mgr -I$(top_srcdir)/netconf/src/ncx -I$(top_srcdir)/netconf/src/platform -I$(top_srcdir)/netconf/src/ydump $(XML_CPPFLAGS)
+libietf_i2rs_rib_la_LDFLAGS = -module $(top_builddir)/netconf/src/agt/libyumaagt.la $(top_builddir)/netconf/src/ncx/libyumancx.la
 examples_yang_DATA = $(top_srcdir)/example-modules/i2rs/ietf-i2rs-rib.yang
 all: all-am
 
@@ -435,8 +436,8 @@ clean-netconfmoduleLTLIBRARIES:
 	  rm -f $${locs}; \
 	}
 
-libi2rs.la: $(libi2rs_la_OBJECTS) $(libi2rs_la_DEPENDENCIES) $(EXTRA_libi2rs_la_DEPENDENCIES) 
-	$(AM_V_CCLD)$(libi2rs_la_LINK) -rpath $(netconfmoduledir) $(libi2rs_la_OBJECTS) $(libi2rs_la_LIBADD) $(LIBS)
+libietf-i2rs-rib.la: $(libietf_i2rs_rib_la_OBJECTS) $(libietf_i2rs_rib_la_DEPENDENCIES) $(EXTRA_libietf_i2rs_rib_la_DEPENDENCIES) 
+	$(AM_V_CCLD)$(libietf_i2rs_rib_la_LINK) -rpath $(netconfmoduledir) $(libietf_i2rs_rib_la_OBJECTS) $(libietf_i2rs_rib_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -444,8 +445,9 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-include ./$(DEPDIR)/libi2rs_la-Socket.Plo
-include ./$(DEPDIR)/libi2rs_la-ietf-i2rs-rib.Plo
+include ./$(DEPDIR)/libietf_i2rs_rib_la-Socket.Plo
+include ./$(DEPDIR)/libietf_i2rs_rib_la-com.Plo
+include ./$(DEPDIR)/libietf_i2rs_rib_la-ietf-i2rs-rib.Plo
 
 .c.o:
 	$(AM_V_CC)$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -468,19 +470,26 @@ include ./$(DEPDIR)/libi2rs_la-ietf-i2rs-rib.Plo
 #	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
 #	$(AM_V_CC_no)$(LTCOMPILE) -c -o $@ $<
 
-libi2rs_la-ietf-i2rs-rib.lo: $(top_srcdir)/example-modules/i2rs/ietf-i2rs-rib.c
-	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libi2rs_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libi2rs_la-ietf-i2rs-rib.lo -MD -MP -MF $(DEPDIR)/libi2rs_la-ietf-i2rs-rib.Tpo -c -o libi2rs_la-ietf-i2rs-rib.lo `test -f '$(top_srcdir)/example-modules/i2rs/ietf-i2rs-rib.c' || echo '$(srcdir)/'`$(top_srcdir)/example-modules/i2rs/ietf-i2rs-rib.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/libi2rs_la-ietf-i2rs-rib.Tpo $(DEPDIR)/libi2rs_la-ietf-i2rs-rib.Plo
-#	$(AM_V_CC)source='$(top_srcdir)/example-modules/i2rs/ietf-i2rs-rib.c' object='libi2rs_la-ietf-i2rs-rib.lo' libtool=yes \
+libietf_i2rs_rib_la-ietf-i2rs-rib.lo: $(top_srcdir)/example-modules/i2rs/ietf-i2rs-rib.c
+	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libietf_i2rs_rib_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libietf_i2rs_rib_la-ietf-i2rs-rib.lo -MD -MP -MF $(DEPDIR)/libietf_i2rs_rib_la-ietf-i2rs-rib.Tpo -c -o libietf_i2rs_rib_la-ietf-i2rs-rib.lo `test -f '$(top_srcdir)/example-modules/i2rs/ietf-i2rs-rib.c' || echo '$(srcdir)/'`$(top_srcdir)/example-modules/i2rs/ietf-i2rs-rib.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/libietf_i2rs_rib_la-ietf-i2rs-rib.Tpo $(DEPDIR)/libietf_i2rs_rib_la-ietf-i2rs-rib.Plo
+#	$(AM_V_CC)source='$(top_srcdir)/example-modules/i2rs/ietf-i2rs-rib.c' object='libietf_i2rs_rib_la-ietf-i2rs-rib.lo' libtool=yes \
 #	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libi2rs_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libi2rs_la-ietf-i2rs-rib.lo `test -f '$(top_srcdir)/example-modules/i2rs/ietf-i2rs-rib.c' || echo '$(srcdir)/'`$(top_srcdir)/example-modules/i2rs/ietf-i2rs-rib.c
+#	$(AM_V_CC_no)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libietf_i2rs_rib_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libietf_i2rs_rib_la-ietf-i2rs-rib.lo `test -f '$(top_srcdir)/example-modules/i2rs/ietf-i2rs-rib.c' || echo '$(srcdir)/'`$(top_srcdir)/example-modules/i2rs/ietf-i2rs-rib.c
 
-libi2rs_la-Socket.lo: $(top_srcdir)/example-modules/i2rs/Socket.c
-	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libi2rs_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libi2rs_la-Socket.lo -MD -MP -MF $(DEPDIR)/libi2rs_la-Socket.Tpo -c -o libi2rs_la-Socket.lo `test -f '$(top_srcdir)/example-modules/i2rs/Socket.c' || echo '$(srcdir)/'`$(top_srcdir)/example-modules/i2rs/Socket.c
-	$(AM_V_at)$(am__mv) $(DEPDIR)/libi2rs_la-Socket.Tpo $(DEPDIR)/libi2rs_la-Socket.Plo
-#	$(AM_V_CC)source='$(top_srcdir)/example-modules/i2rs/Socket.c' object='libi2rs_la-Socket.lo' libtool=yes \
+libietf_i2rs_rib_la-Socket.lo: $(top_srcdir)/example-modules/i2rs/Socket.c
+	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libietf_i2rs_rib_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libietf_i2rs_rib_la-Socket.lo -MD -MP -MF $(DEPDIR)/libietf_i2rs_rib_la-Socket.Tpo -c -o libietf_i2rs_rib_la-Socket.lo `test -f '$(top_srcdir)/example-modules/i2rs/Socket.c' || echo '$(srcdir)/'`$(top_srcdir)/example-modules/i2rs/Socket.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/libietf_i2rs_rib_la-Socket.Tpo $(DEPDIR)/libietf_i2rs_rib_la-Socket.Plo
+#	$(AM_V_CC)source='$(top_srcdir)/example-modules/i2rs/Socket.c' object='libietf_i2rs_rib_la-Socket.lo' libtool=yes \
 #	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(AM_V_CC_no)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libi2rs_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libi2rs_la-Socket.lo `test -f '$(top_srcdir)/example-modules/i2rs/Socket.c' || echo '$(srcdir)/'`$(top_srcdir)/example-modules/i2rs/Socket.c
+#	$(AM_V_CC_no)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libietf_i2rs_rib_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libietf_i2rs_rib_la-Socket.lo `test -f '$(top_srcdir)/example-modules/i2rs/Socket.c' || echo '$(srcdir)/'`$(top_srcdir)/example-modules/i2rs/Socket.c
+
+libietf_i2rs_rib_la-com.lo: $(top_srcdir)/example-modules/i2rs/com.c
+	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libietf_i2rs_rib_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libietf_i2rs_rib_la-com.lo -MD -MP -MF $(DEPDIR)/libietf_i2rs_rib_la-com.Tpo -c -o libietf_i2rs_rib_la-com.lo `test -f '$(top_srcdir)/example-modules/i2rs/com.c' || echo '$(srcdir)/'`$(top_srcdir)/example-modules/i2rs/com.c
+	$(AM_V_at)$(am__mv) $(DEPDIR)/libietf_i2rs_rib_la-com.Tpo $(DEPDIR)/libietf_i2rs_rib_la-com.Plo
+#	$(AM_V_CC)source='$(top_srcdir)/example-modules/i2rs/com.c' object='libietf_i2rs_rib_la-com.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(AM_V_CC_no)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libietf_i2rs_rib_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libietf_i2rs_rib_la-com.lo `test -f '$(top_srcdir)/example-modules/i2rs/com.c' || echo '$(srcdir)/'`$(top_srcdir)/example-modules/i2rs/com.c
 
 mostlyclean-libtool:
 	-rm -f *.lo
