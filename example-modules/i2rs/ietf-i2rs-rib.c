@@ -45,8 +45,10 @@
 
 /* module static variables */
 static ncx_module_t *ietf_i2rs_rib_mod;
+static obj_template_t *routing_instance_obj;
 static obj_template_t *route_add_obj;
 static obj_template_t *route_delete_obj;
+static val_value_t *routing_instance_val;
 
 /* put your static variables here */
 
@@ -59,12 +61,697 @@ static obj_template_t *route_delete_obj;
 static void y_ietf_i2rs_rib_init_static_vars (void)
 {
   ietf_i2rs_rib_mod = NULL;
+  routing_instance_obj = NULL;
   route_add_obj = NULL;
   route_delete_obj = NULL;
+  routing_instance_val = NULL;
 
   /* init your static variables here */
 
 } /* y_ietf_i2rs_rib_init_static_vars */
+
+
+/********************************************************************
+* FUNCTION ietf_i2rs_rib_routing_instance_route_list_route_index_edit
+* 
+* Edit database object callback
+* Path: /routing-instance/route-list/route-index
+* Add object instrumentation in COMMIT phase.
+* 
+* INPUTS:
+*     see agt/agt_cb.h for details
+* 
+* RETURNS:
+*     error status
+********************************************************************/
+static status_t ietf_i2rs_rib_routing_instance_route_list_route_index_edit (
+  ses_cb_t *scb,
+  rpc_msg_t *msg,
+  agt_cbtyp_t cbtyp,
+  op_editop_t editop,
+  val_value_t *newval,
+  val_value_t *curval)
+{
+  status_t res = NO_ERR;
+  val_value_t *errorval = (curval) ? curval : newval;
+
+  if (LOGDEBUG) {
+    log_debug("\nEnter ietf_i2rs_rib_routing_instance_route_list_route_index_edit callback for %s phase",
+      agt_cbtype_name(cbtyp));
+  }
+
+  switch (cbtyp) {
+  case AGT_CB_VALIDATE:
+    /* description-stmt validation here */
+    break;
+  case AGT_CB_APPLY:
+    /* database manipulation done here */
+    break;
+  case AGT_CB_COMMIT:
+    /* device instrumentation done here */
+    switch (editop) {
+    case OP_EDITOP_LOAD:
+      break;
+    case OP_EDITOP_MERGE:
+printf("Merging route-index\n");
+      break;
+    case OP_EDITOP_REPLACE:
+      break;
+    case OP_EDITOP_CREATE:
+printf("Creating route-index\n");
+      break;
+    case OP_EDITOP_DELETE:
+      break;
+    default:
+      res = SET_ERROR(ERR_INTERNAL_VAL);
+    }
+    break;
+  case AGT_CB_ROLLBACK:
+    /* undo device instrumentation here */
+    break;
+  default:
+    res = SET_ERROR(ERR_INTERNAL_VAL);
+  }
+
+  if (res != NO_ERR) {
+    agt_record_error(
+      scb,
+      &msg->mhdr,
+      NCX_LAYER_CONTENT,
+      res,
+      NULL,
+      (errorval) ? NCX_NT_VAL : NCX_NT_NONE,
+      errorval,
+      (errorval) ? NCX_NT_VAL : NCX_NT_NONE,
+      errorval);
+  }
+  return res;
+
+} /* ietf_i2rs_rib_routing_instance_route_list_route_index_edit */
+
+
+/********************************************************************
+* FUNCTION ietf_i2rs_rib_routing_instance_route_list_route_prefix_edit
+* 
+* Edit database object callback
+* Path: /routing-instance/route-list/route/prefix
+* Add object instrumentation in COMMIT phase.
+* 
+* INPUTS:
+*     see agt/agt_cb.h for details
+* 
+* RETURNS:
+*     error status
+********************************************************************/
+static status_t ietf_i2rs_rib_routing_instance_route_list_route_prefix_edit (
+  ses_cb_t *scb,
+  rpc_msg_t *msg,
+  agt_cbtyp_t cbtyp,
+  op_editop_t editop,
+  val_value_t *newval,
+  val_value_t *curval)
+{
+  status_t res = NO_ERR;
+  val_value_t *errorval = (curval) ? curval : newval;
+
+  if (LOGDEBUG) {
+    log_debug("\nEnter ietf_i2rs_rib_routing_instance_route_list_route_prefix_edit callback for %s phase",
+      agt_cbtype_name(cbtyp));
+  }
+
+  switch (cbtyp) {
+  case AGT_CB_VALIDATE:
+    /* description-stmt validation here */
+    break;
+  case AGT_CB_APPLY:
+    /* database manipulation done here */
+    break;
+  case AGT_CB_COMMIT:
+    /* device instrumentation done here */
+    switch (editop) {
+    case OP_EDITOP_LOAD:
+      break;
+    case OP_EDITOP_MERGE:
+      break;
+    case OP_EDITOP_REPLACE:
+      break;
+    case OP_EDITOP_CREATE:
+      break;
+    case OP_EDITOP_DELETE:
+      break;
+    default:
+      res = SET_ERROR(ERR_INTERNAL_VAL);
+    }
+    break;
+  case AGT_CB_ROLLBACK:
+    /* undo device instrumentation here */
+    break;
+  default:
+    res = SET_ERROR(ERR_INTERNAL_VAL);
+  }
+
+  if (res != NO_ERR) {
+    agt_record_error(
+      scb,
+      &msg->mhdr,
+      NCX_LAYER_CONTENT,
+      res,
+      NULL,
+      (errorval) ? NCX_NT_VAL : NCX_NT_NONE,
+      errorval,
+      (errorval) ? NCX_NT_VAL : NCX_NT_NONE,
+      errorval);
+  }
+  return res;
+
+} /* ietf_i2rs_rib_routing_instance_route_list_route_prefix_edit */
+
+
+/********************************************************************
+* FUNCTION ietf_i2rs_rib_routing_instance_route_list_route_nexthop_edit
+* 
+* Edit database object callback
+* Path: /routing-instance/route-list/route/nexthop
+* Add object instrumentation in COMMIT phase.
+* 
+* INPUTS:
+*     see agt/agt_cb.h for details
+* 
+* RETURNS:
+*     error status
+********************************************************************/
+static status_t ietf_i2rs_rib_routing_instance_route_list_route_nexthop_edit (
+  ses_cb_t *scb,
+  rpc_msg_t *msg,
+  agt_cbtyp_t cbtyp,
+  op_editop_t editop,
+  val_value_t *newval,
+  val_value_t *curval)
+{
+  status_t res = NO_ERR;
+  val_value_t *errorval = (curval) ? curval : newval;
+
+  if (LOGDEBUG) {
+    log_debug("\nEnter ietf_i2rs_rib_routing_instance_route_list_route_nexthop_edit callback for %s phase",
+      agt_cbtype_name(cbtyp));
+  }
+
+  switch (cbtyp) {
+  case AGT_CB_VALIDATE:
+    /* description-stmt validation here */
+    break;
+  case AGT_CB_APPLY:
+    /* database manipulation done here */
+    break;
+  case AGT_CB_COMMIT:
+    /* device instrumentation done here */
+    switch (editop) {
+    case OP_EDITOP_LOAD:
+      break;
+    case OP_EDITOP_MERGE:
+      break;
+    case OP_EDITOP_REPLACE:
+      break;
+    case OP_EDITOP_CREATE:
+      break;
+    case OP_EDITOP_DELETE:
+      break;
+    default:
+      res = SET_ERROR(ERR_INTERNAL_VAL);
+    }
+    break;
+  case AGT_CB_ROLLBACK:
+    /* undo device instrumentation here */
+    break;
+  default:
+    res = SET_ERROR(ERR_INTERNAL_VAL);
+  }
+
+  if (res != NO_ERR) {
+    agt_record_error(
+      scb,
+      &msg->mhdr,
+      NCX_LAYER_CONTENT,
+      res,
+      NULL,
+      (errorval) ? NCX_NT_VAL : NCX_NT_NONE,
+      errorval,
+      (errorval) ? NCX_NT_VAL : NCX_NT_NONE,
+      errorval);
+  }
+  return res;
+
+} /* ietf_i2rs_rib_routing_instance_route_list_route_nexthop_edit */
+
+
+/********************************************************************
+* FUNCTION ietf_i2rs_rib_routing_instance_route_list_route_route_preference_edit
+* 
+* Edit database object callback
+* Path: /routing-instance/route-list/route/route-preference
+* Add object instrumentation in COMMIT phase.
+* 
+* INPUTS:
+*     see agt/agt_cb.h for details
+* 
+* RETURNS:
+*     error status
+********************************************************************/
+static status_t ietf_i2rs_rib_routing_instance_route_list_route_route_preference_edit (
+  ses_cb_t *scb,
+  rpc_msg_t *msg,
+  agt_cbtyp_t cbtyp,
+  op_editop_t editop,
+  val_value_t *newval,
+  val_value_t *curval)
+{
+  status_t res = NO_ERR;
+  val_value_t *errorval = (curval) ? curval : newval;
+
+  if (LOGDEBUG) {
+    log_debug("\nEnter ietf_i2rs_rib_routing_instance_route_list_route_route_preference_edit callback for %s phase",
+      agt_cbtype_name(cbtyp));
+  }
+
+  switch (cbtyp) {
+  case AGT_CB_VALIDATE:
+    /* description-stmt validation here */
+    break;
+  case AGT_CB_APPLY:
+    /* database manipulation done here */
+    break;
+  case AGT_CB_COMMIT:
+    /* device instrumentation done here */
+    switch (editop) {
+    case OP_EDITOP_LOAD:
+      break;
+    case OP_EDITOP_MERGE:
+      break;
+    case OP_EDITOP_REPLACE:
+      break;
+    case OP_EDITOP_CREATE:
+      break;
+    case OP_EDITOP_DELETE:
+      break;
+    default:
+      res = SET_ERROR(ERR_INTERNAL_VAL);
+    }
+    break;
+  case AGT_CB_ROLLBACK:
+    /* undo device instrumentation here */
+    break;
+  default:
+    res = SET_ERROR(ERR_INTERNAL_VAL);
+  }
+
+  if (res != NO_ERR) {
+    agt_record_error(
+      scb,
+      &msg->mhdr,
+      NCX_LAYER_CONTENT,
+      res,
+      NULL,
+      (errorval) ? NCX_NT_VAL : NCX_NT_NONE,
+      errorval,
+      (errorval) ? NCX_NT_VAL : NCX_NT_NONE,
+      errorval);
+  }
+  return res;
+
+} /* ietf_i2rs_rib_routing_instance_route_list_route_route_preference_edit */
+
+
+/********************************************************************
+* FUNCTION ietf_i2rs_rib_routing_instance_route_list_route_edit
+* 
+* Edit database object callback
+* Path: /routing-instance/route-list/route
+* Add object instrumentation in COMMIT phase.
+* 
+* INPUTS:
+*     see agt/agt_cb.h for details
+* 
+* RETURNS:
+*     error status
+********************************************************************/
+static status_t ietf_i2rs_rib_routing_instance_route_list_route_edit (
+  ses_cb_t *scb,
+  rpc_msg_t *msg,
+  agt_cbtyp_t cbtyp,
+  op_editop_t editop,
+  val_value_t *newval,
+  val_value_t *curval)
+{
+  status_t res = NO_ERR;
+  val_value_t *errorval = (curval) ? curval : newval;
+
+ val_value_t *return_failure_detail_val;
+  boolean return_failure_detail;
+  val_value_t *prefix_val;
+  xmlChar *prefixlen;
+  xmlChar *address;
+  xmlChar *prefix;
+  val_value_t *nexthop_val;
+  xmlChar *nexthop;
+  val_value_t *route_preference_val;
+  uint32 route_preference;
+
+  if (LOGDEBUG) {
+    log_debug("\nEnter ietf_i2rs_rib_routing_instance_route_list_route_edit callback for %s phase",
+      agt_cbtype_name(cbtyp));
+  }
+
+  switch (cbtyp) {
+  case AGT_CB_VALIDATE:
+    /* description-stmt validation here */
+    break;
+  case AGT_CB_APPLY:
+    /* database manipulation done here */
+    break;
+  case AGT_CB_COMMIT:
+    /* device instrumentation done here */
+    switch (editop) {
+    case OP_EDITOP_LOAD:
+printf("Loading node\n");
+      break;
+    case OP_EDITOP_MERGE:
+printf("Merging node\n");
+      break;
+    case OP_EDITOP_REPLACE:
+printf("Replacing node\n");
+      break;
+    case OP_EDITOP_CREATE:
+printf("Inserting node\n");
+
+      break;
+    case OP_EDITOP_DELETE:
+printf("Deleting node\n");
+break;
+    default:
+      res = SET_ERROR(ERR_INTERNAL_VAL);
+    }
+    break;
+  case AGT_CB_ROLLBACK:
+    /* undo device instrumentation here */
+    break;
+  default:
+    res = SET_ERROR(ERR_INTERNAL_VAL);
+  }
+
+  if (res != NO_ERR) {
+    agt_record_error(
+      scb,
+      &msg->mhdr,
+      NCX_LAYER_CONTENT,
+      res,
+      NULL,
+      (errorval) ? NCX_NT_VAL : NCX_NT_NONE,
+      errorval,
+      (errorval) ? NCX_NT_VAL : NCX_NT_NONE,
+      errorval);
+  }
+  return res;
+
+} /* ietf_i2rs_rib_routing_instance_route_list_route_edit */
+
+
+/********************************************************************
+* FUNCTION ietf_i2rs_rib_routing_instance_route_list_edit
+* 
+* Edit database object callback
+* Path: /routing-instance/route-list
+* Add object instrumentation in COMMIT phase.
+* 
+* INPUTS:
+*     see agt/agt_cb.h for details
+* 
+* RETURNS:
+*     error status
+********************************************************************/
+static status_t ietf_i2rs_rib_routing_instance_route_list_edit (
+  ses_cb_t *scb,
+  rpc_msg_t *msg,
+  agt_cbtyp_t cbtyp,
+  op_editop_t editop,
+  val_value_t *newval,
+  val_value_t *curval)
+{
+  status_t res = NO_ERR;
+  val_value_t *errorval = (curval) ? curval : newval;
+
+ val_value_t *return_failure_detail_val;
+  boolean return_failure_detail;
+  val_value_t *prefix_val;
+  xmlChar *prefixlen;
+  xmlChar *address;
+  xmlChar *prefix;
+  val_value_t *nexthop_val;
+  xmlChar *nexthop;
+  val_value_t *route_preference_val;
+  uint32 route_preference;
+
+  if (LOGDEBUG) {
+    log_debug("\nEnter ietf_i2rs_rib_routing_instance_route_list_edit callback for %s phase",
+      agt_cbtype_name(cbtyp));
+  }
+
+  switch (cbtyp) {
+  case AGT_CB_VALIDATE:
+    /* description-stmt validation here */
+    break;
+  case AGT_CB_APPLY:
+    /* database manipulation done here */
+    break;
+  case AGT_CB_COMMIT:
+    /* device instrumentation done here */
+    switch (editop) {
+    case OP_EDITOP_LOAD:
+printf("Loading route list\n");
+      break;
+    case OP_EDITOP_MERGE:
+printf("Merging route list\n");
+      break;
+    case OP_EDITOP_REPLACE:
+printf("Replacing route list\n");
+      break;
+    case OP_EDITOP_CREATE:
+printf("Creating route list\n");
+
+
+newval = val_find_child(
+	newval,
+	y_ietf_i2rs_rib_M_ietf_i2rs_rib,
+	y_ietf_i2rs_rib_N_route
+	);
+ if (newval == NULL || return_failure_detail_val->res != NO_ERR) {
+      printf("Error in routing-instance");
+    }
+
+
+
+  return_failure_detail_val = val_find_child(
+    newval,
+    y_ietf_i2rs_rib_M_ietf_i2rs_rib,
+    y_ietf_i2rs_rib_N_return_failure_detail);
+  if (return_failure_detail_val != NULL && return_failure_detail_val->res == NO_ERR) {
+    return_failure_detail = VAL_BOOL(return_failure_detail_val);
+  }
+
+  prefix_val = val_find_child(
+    newval,
+    y_ietf_i2rs_rib_M_ietf_i2rs_rib,
+    y_ietf_i2rs_rib_N_prefix);
+  if (prefix_val != NULL && prefix_val->res == NO_ERR) {
+    prefix = VAL_STRING(prefix_val);
+    address = strsep(&prefix, "/");
+    prefixlen = strsep(&prefix, "/");
+  }
+
+  nexthop_val = val_find_child(
+    newval,
+    y_ietf_i2rs_rib_M_ietf_i2rs_rib,
+    y_ietf_i2rs_rib_N_nexthop);
+  if (nexthop_val != NULL && nexthop_val->res == NO_ERR) {
+    nexthop = VAL_STRING(nexthop_val);
+  }
+
+  route_preference_val = val_find_child(
+    newval,
+    y_ietf_i2rs_rib_M_ietf_i2rs_rib,
+    y_ietf_i2rs_rib_N_route_preference);
+  if (route_preference_val != NULL && route_preference_val->res == NO_ERR) {
+    route_preference = VAL_UINT(route_preference_val);
+  }
+
+if (address != NULL && prefixlen != NULL && nexthop != NULL && route_preference != 0){
+              makeCommand(ZEBRA_IPV4_ROUTE_ADD, address, strtol(prefixlen,(char **)NULL,10), nexthop, route_preference);
+      }	
+      break;
+    case OP_EDITOP_DELETE:
+printf("Deleting route list\n");
+
+curval = val_find_child(
+	curval,
+	y_ietf_i2rs_rib_M_ietf_i2rs_rib,
+	y_ietf_i2rs_rib_N_route
+	);
+ if (curval == NULL || return_failure_detail_val->res != NO_ERR) {
+      printf("Error in routing-instance");
+    }
+
+
+
+  return_failure_detail_val = val_find_child(
+    curval,
+    y_ietf_i2rs_rib_M_ietf_i2rs_rib,
+    y_ietf_i2rs_rib_N_return_failure_detail);
+  if (return_failure_detail_val != NULL && return_failure_detail_val->res == NO_ERR) {
+    return_failure_detail = VAL_BOOL(return_failure_detail_val);
+  }
+
+  prefix_val = val_find_child(
+    curval,
+    y_ietf_i2rs_rib_M_ietf_i2rs_rib,
+    y_ietf_i2rs_rib_N_prefix);
+  if (prefix_val != NULL && prefix_val->res == NO_ERR) {
+    prefix = VAL_STRING(prefix_val);
+    address = strsep(&prefix, "/");
+    prefixlen = strsep(&prefix, "/");
+  }
+
+  nexthop_val = val_find_child(
+    curval,
+    y_ietf_i2rs_rib_M_ietf_i2rs_rib,
+    y_ietf_i2rs_rib_N_nexthop);
+  if (nexthop_val != NULL && nexthop_val->res == NO_ERR) {
+    nexthop = VAL_STRING(nexthop_val);
+  }
+
+  route_preference_val = val_find_child(
+    curval,
+    y_ietf_i2rs_rib_M_ietf_i2rs_rib,
+    y_ietf_i2rs_rib_N_route_preference);
+  if (route_preference_val != NULL && route_preference_val->res == NO_ERR) {
+    route_preference = VAL_UINT(route_preference_val);
+  }
+
+if (address != NULL && prefixlen != NULL && nexthop != NULL && route_preference != 0){
+              makeCommand(ZEBRA_IPV4_ROUTE_DELETE, address, strtol(prefixlen,(char **)NULL,10), nexthop, route_preference);
+      }	
+      break;
+    default:
+      res = SET_ERROR(ERR_INTERNAL_VAL);
+    }
+    break;
+  case AGT_CB_ROLLBACK:
+    /* undo device instrumentation here */
+    break;
+  default:
+    res = SET_ERROR(ERR_INTERNAL_VAL);
+  }
+
+  if (res != NO_ERR) {
+    agt_record_error(
+      scb,
+      &msg->mhdr,
+      NCX_LAYER_CONTENT,
+      res,
+      NULL,
+      (errorval) ? NCX_NT_VAL : NCX_NT_NONE,
+      errorval,
+      (errorval) ? NCX_NT_VAL : NCX_NT_NONE,
+      errorval);
+  }
+  return res;
+
+} /* ietf_i2rs_rib_routing_instance_route_list_edit */
+
+
+/********************************************************************
+* FUNCTION ietf_i2rs_rib_routing_instance_edit
+* 
+* Edit database object callback
+* Path: /routing-instance
+* Add object instrumentation in COMMIT phase.
+* 
+* INPUTS:
+*     see agt/agt_cb.h for details
+* 
+* RETURNS:
+*     error status
+********************************************************************/
+static status_t ietf_i2rs_rib_routing_instance_edit (
+  ses_cb_t *scb,
+  rpc_msg_t *msg,
+  agt_cbtyp_t cbtyp,
+  op_editop_t editop,
+  val_value_t *newval,
+  val_value_t *curval)
+{
+  status_t res = NO_ERR;
+  val_value_t *errorval = (curval) ? curval : newval;
+
+  if (LOGDEBUG) {
+    log_debug("\nEnter ietf_i2rs_rib_routing_instance_edit callback for %s phase",
+      agt_cbtype_name(cbtyp));
+  }
+
+  switch (cbtyp) {
+  case AGT_CB_VALIDATE:
+    /* description-stmt validation here */
+    break;
+  case AGT_CB_APPLY:
+    /* database manipulation done here */
+    break;
+  case AGT_CB_COMMIT:
+    /* device instrumentation done here */
+    switch (editop) {
+    case OP_EDITOP_LOAD:
+printf("Loading routing instance\n");
+      break;
+    case OP_EDITOP_MERGE:
+log_debug("Merging routing instance\n");
+      break;
+    case OP_EDITOP_REPLACE:
+printf("Replacing routing instance\n");
+      break;
+    case OP_EDITOP_CREATE:
+printf("Creating routing instance\n");
+      break;
+    case OP_EDITOP_DELETE:
+printf("Deleting routing instance\n");
+      break;
+    default:
+      res = SET_ERROR(ERR_INTERNAL_VAL);
+    }
+
+    if (res == NO_ERR) {
+      res = agt_check_cache(&routing_instance_val, newval, curval, editop);
+    }
+    
+    break;
+  case AGT_CB_ROLLBACK:
+    /* undo device instrumentation here */
+    break;
+  default:
+    res = SET_ERROR(ERR_INTERNAL_VAL);
+  }
+
+  if (res != NO_ERR) {
+    agt_record_error(
+      scb,
+      &msg->mhdr,
+      NCX_LAYER_CONTENT,
+      res,
+      NULL,
+      (errorval) ? NCX_NT_VAL : NCX_NT_NONE,
+      errorval,
+      (errorval) ? NCX_NT_VAL : NCX_NT_NONE,
+      errorval);
+  }
+  return res;
+
+} /* ietf_i2rs_rib_routing_instance_edit */
 
 
 /********************************************************************
@@ -169,13 +856,13 @@ static status_t y_ietf_i2rs_rib_route_add_invoke (
   val_value_t *return_failure_detail_val;
   boolean return_failure_detail;
   val_value_t *prefix_val;
-  xmlChar *prefix;
-  xmlChar *address;
   xmlChar *prefixlen;
+  xmlChar *address;
+  xmlChar *prefix;
   val_value_t *nexthop_val;
   xmlChar *nexthop;
   val_value_t *route_preference_val;
-  uint32 route_preference = 0;
+  uint32 route_preference;
 
   return_failure_detail_val = val_find_child(
     msg->rpc_input,
@@ -425,6 +1112,12 @@ status_t y_ietf_i2rs_rib_init (
     return res;
   }
 
+  routing_instance_obj = ncx_find_object(
+    ietf_i2rs_rib_mod,
+    y_ietf_i2rs_rib_N_routing_instance);
+  if (ietf_i2rs_rib_mod == NULL) {
+    return SET_ERROR(ERR_NCX_DEF_NOT_FOUND);
+  }
   route_add_obj = ncx_find_object(
     ietf_i2rs_rib_mod,
     y_ietf_i2rs_rib_N_route_add);
@@ -473,6 +1166,69 @@ status_t y_ietf_i2rs_rib_init (
     return res;
   }
 
+  res = agt_cb_register_callback(
+    y_ietf_i2rs_rib_M_ietf_i2rs_rib,
+    (const xmlChar *)"/routing-instance",
+    y_ietf_i2rs_rib_R_ietf_i2rs_rib,
+    ietf_i2rs_rib_routing_instance_edit);
+  if (res != NO_ERR) {
+    return res;
+  }
+
+  res = agt_cb_register_callback(
+    y_ietf_i2rs_rib_M_ietf_i2rs_rib,
+    (const xmlChar *)"/routing-instance/route-list",
+    y_ietf_i2rs_rib_R_ietf_i2rs_rib,
+    ietf_i2rs_rib_routing_instance_route_list_edit);
+  if (res != NO_ERR) {
+    return res;
+  }
+
+  res = agt_cb_register_callback(
+    y_ietf_i2rs_rib_M_ietf_i2rs_rib,
+    (const xmlChar *)"/routing-instance/route-list/route-index",
+    y_ietf_i2rs_rib_R_ietf_i2rs_rib,
+    ietf_i2rs_rib_routing_instance_route_list_route_index_edit);
+  if (res != NO_ERR) {
+    return res;
+  }
+
+  res = agt_cb_register_callback(
+    y_ietf_i2rs_rib_M_ietf_i2rs_rib,
+    (const xmlChar *)"/routing-instance/route-list/route",
+    y_ietf_i2rs_rib_R_ietf_i2rs_rib,
+    ietf_i2rs_rib_routing_instance_route_list_route_edit);
+  if (res != NO_ERR) {
+    return res;
+  }
+
+  res = agt_cb_register_callback(
+    y_ietf_i2rs_rib_M_ietf_i2rs_rib,
+    (const xmlChar *)"/routing-instance/route-list/route/prefix",
+    y_ietf_i2rs_rib_R_ietf_i2rs_rib,
+    ietf_i2rs_rib_routing_instance_route_list_route_prefix_edit);
+  if (res != NO_ERR) {
+    return res;
+  }
+
+  res = agt_cb_register_callback(
+    y_ietf_i2rs_rib_M_ietf_i2rs_rib,
+    (const xmlChar *)"/routing-instance/route-list/route/nexthop",
+    y_ietf_i2rs_rib_R_ietf_i2rs_rib,
+    ietf_i2rs_rib_routing_instance_route_list_route_nexthop_edit);
+  if (res != NO_ERR) {
+    return res;
+  }
+
+  res = agt_cb_register_callback(
+    y_ietf_i2rs_rib_M_ietf_i2rs_rib,
+    (const xmlChar *)"/routing-instance/route-list/route/route-preference",
+    y_ietf_i2rs_rib_R_ietf_i2rs_rib,
+    ietf_i2rs_rib_routing_instance_route_list_route_route_preference_edit);
+  if (res != NO_ERR) {
+    return res;
+  }
+
   /* put your module initialization code here */
   
   return res;
@@ -490,6 +1246,14 @@ status_t y_ietf_i2rs_rib_init (
 status_t y_ietf_i2rs_rib_init2 (void)
 {
   status_t res = NO_ERR;
+
+  routing_instance_val = agt_init_cache(
+    y_ietf_i2rs_rib_M_ietf_i2rs_rib,
+    y_ietf_i2rs_rib_N_routing_instance,
+    &res);
+  if (res != NO_ERR) {
+    return res;
+  }
 
   /* put your init2 code here */
 
@@ -511,6 +1275,34 @@ void y_ietf_i2rs_rib_cleanup (void)
   agt_rpc_unregister_method(
     y_ietf_i2rs_rib_M_ietf_i2rs_rib,
     y_ietf_i2rs_rib_N_route_delete);
+  agt_cb_unregister_callbacks(
+    y_ietf_i2rs_rib_M_ietf_i2rs_rib,
+    (const xmlChar *)"/routing-instance");
+
+  agt_cb_unregister_callbacks(
+    y_ietf_i2rs_rib_M_ietf_i2rs_rib,
+    (const xmlChar *)"/routing-instance/route-list");
+
+  agt_cb_unregister_callbacks(
+    y_ietf_i2rs_rib_M_ietf_i2rs_rib,
+    (const xmlChar *)"/routing-instance/route-list/route-index");
+
+  agt_cb_unregister_callbacks(
+    y_ietf_i2rs_rib_M_ietf_i2rs_rib,
+    (const xmlChar *)"/routing-instance/route-list/route");
+
+  agt_cb_unregister_callbacks(
+    y_ietf_i2rs_rib_M_ietf_i2rs_rib,
+    (const xmlChar *)"/routing-instance/route-list/route/prefix");
+
+  agt_cb_unregister_callbacks(
+    y_ietf_i2rs_rib_M_ietf_i2rs_rib,
+    (const xmlChar *)"/routing-instance/route-list/route/nexthop");
+
+  agt_cb_unregister_callbacks(
+    y_ietf_i2rs_rib_M_ietf_i2rs_rib,
+    (const xmlChar *)"/routing-instance/route-list/route/route-preference");
+
   /* put your cleanup code here */
   
 } /* y_ietf_i2rs_rib_cleanup */

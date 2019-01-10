@@ -21,6 +21,54 @@ module ietf-i2rs-rib {
     description "initial revision";
     reference "draft-ietf-i2rs-data-model-09";
   }
+
+
+container routing-instance {
+    description
+      "A routing instance, in the context of
+       the RIB information model, is a collection
+       of RIBs, interfaces, and routing parameters";
+ list route-list {
+        key "route-index";
+        description
+          "A list of routes of a rib.";
+      leaf route-index {
+	             type uint64 ;
+	             mandatory true;
+	             description
+	              "Route index.";
+	}	
+
+	container route {
+	description
+	  "A single routing entry";
+	
+
+	leaf prefix {
+                     type inet:ipv4-prefix;
+                     mandatory true;
+                     description
+                      "An IPv4 destination address as the match.";
+                    }
+        leaf nexthop {
+                     type inet:ipv4-address;
+                     mandatory true;
+                     description
+                     "The nexthop is an IPv4 address.";
+                }
+        leaf route-preference {
+                     type uint32;
+                     mandatory true;
+                     description
+                     "The preference of the route";
+        }
+	}
+      }
+
+
+}
+
+
     grouping route-operation-state {
       description "Route operation state.";
       leaf success-count {

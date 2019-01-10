@@ -43,11 +43,33 @@ extern "C" {
 #define y_ietf_i2rs_rib_N_nexthop (const xmlChar *)"nexthop"
 #define y_ietf_i2rs_rib_N_prefix (const xmlChar *)"prefix"
 #define y_ietf_i2rs_rib_N_return_failure_detail (const xmlChar *)"return-failure-detail"
+#define y_ietf_i2rs_rib_N_route (const xmlChar *)"route"
 #define y_ietf_i2rs_rib_N_route_add (const xmlChar *)"route-add"
 #define y_ietf_i2rs_rib_N_route_delete (const xmlChar *)"route-delete"
 #define y_ietf_i2rs_rib_N_route_index (const xmlChar *)"route-index"
+#define y_ietf_i2rs_rib_N_route_list (const xmlChar *)"route-list"
 #define y_ietf_i2rs_rib_N_route_preference (const xmlChar *)"route-preference"
+#define y_ietf_i2rs_rib_N_routing_instance (const xmlChar *)"routing-instance"
 #define y_ietf_i2rs_rib_N_success_count (const xmlChar *)"success-count"
+
+/* container /routing-instance/route-list/route */
+typedef struct y_ietf_i2rs_rib_T_routing_instance_route_list_route_ {
+  xmlChar *prefix;
+  xmlChar *nexthop;
+  uint32 route_preference;
+} y_ietf_i2rs_rib_T_routing_instance_route_list_route;
+
+/* list /routing-instance/route-list */
+typedef struct y_ietf_i2rs_rib_T_routing_instance_route_list_ {
+  dlq_hdr_t qhdr;
+  uint64 route_index;
+  y_ietf_i2rs_rib_T_routing_instance_route_list_route route;
+} y_ietf_i2rs_rib_T_routing_instance_route_list;
+
+/* container /routing-instance */
+typedef struct y_ietf_i2rs_rib_T_routing_instance_ {
+  dlq_hdr_t route_list;
+} y_ietf_i2rs_rib_T_routing_instance;
 
 /* container /route-add/input */
 typedef struct y_ietf_i2rs_rib_T_route_add_input_ {

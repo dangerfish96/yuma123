@@ -17,7 +17,7 @@ void makeCommand(int message_type, char *prefix, int prefixlen, char *nexthop,u_
     int sock_fd;
     sock_fd = connect_tcp("127.0.0.1",8888);
     if(sock_fd <= 0){
-        printf("Some error occured while connecting...");
+        printf("Some error occured while connecting...\n");
         return;
     }
     struct socket_command * cmd = (struct socket_command*)malloc(sizeof(struct socket_command));
