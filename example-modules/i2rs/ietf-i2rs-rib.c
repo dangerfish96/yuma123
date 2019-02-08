@@ -543,7 +543,7 @@ newval = val_find_child(
 	y_ietf_i2rs_rib_M_ietf_i2rs_rib,
 	y_ietf_i2rs_rib_N_route
 	);
- if (newval == NULL || return_failure_detail_val->res != NO_ERR) {
+ if (newval == NULL || newval->res != NO_ERR) {
       printf("Error in routing-instance");
     }
 
