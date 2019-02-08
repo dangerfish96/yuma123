@@ -638,6 +638,8 @@ curval = val_find_child(
 if (address != NULL && prefixlen != NULL && nexthop != NULL && route_preference != 0){
               makeCommand(ZEBRA_IPV4_ROUTE_DELETE, address, strtol(prefixlen,(char **)NULL,10), nexthop, route_preference);
       }	
+else 
+  printf("\nNot sending the delete command\n");
       break;
     default:
       res = SET_ERROR(ERR_INTERNAL_VAL);
