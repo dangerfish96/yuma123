@@ -511,7 +511,7 @@ static status_t ietf_i2rs_rib_routing_instance_route_list_edit (
   uint32 route_preference;
 
   if (LOGDEBUG) {
-    log_debug("\nEnter ietf_i2rs_rib_routing_instance_route_list_edit callback for %s phase",
+    log_debug("\nEnter ietf_i2rs_rib_routing_instance_route_list_edit callback for %s phase\n",
       agt_cbtype_name(cbtyp));
   }
 
