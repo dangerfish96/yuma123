@@ -562,7 +562,7 @@ newval = val_find_child(
     y_ietf_i2rs_rib_M_ietf_i2rs_rib,
     y_ietf_i2rs_rib_N_prefix);
   if (prefix_val != NULL && prefix_val->res == NO_ERR) {
-    prefix = VAL_STRING(prefix_val);
+    prefix = strdup(VAL_STRING(prefix_val));
     address = strsep(&prefix, "/");
     prefixlen = strsep(&prefix, "/");
   }
@@ -614,7 +614,7 @@ curval = val_find_child(
     y_ietf_i2rs_rib_M_ietf_i2rs_rib,
     y_ietf_i2rs_rib_N_prefix);
   if (prefix_val != NULL && prefix_val->res == NO_ERR) {
-    prefix = VAL_STRING(prefix_val);
+    prefix = strdup(VAL_STRING(prefix_val));
     address = strsep(&prefix, "/");
     prefixlen = strsep(&prefix, "/");
   }
